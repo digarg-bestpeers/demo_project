@@ -1,0 +1,54 @@
+{% load static %}
+{% for property in properties %}
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="service-widget">
+          <div class="property-main">
+            <div class="property-wrap">
+              <figure class="post-media wow fadeIn">
+                <img src="{{property.property_photos.get.photo.url}}" alt="" class="img-responsive">
+                <div class="price">
+                  <span class="item-sub-price">${{property.monthly_charge}}</span>
+                </div>
+              </figure>
+              <div class="item-body">
+                <h3>{{property.title|title}}</h3>
+                <div class="info">
+                  <p><span>Bedroom: {{property.property_feature.bedroom}}</span> <span>Bathroom: {{property.property_feature.bathroom}}</span><span>Building Size: <span class="estate-x-size">{{property.property_feature.area}}</span> <span class="estate-x-unit">square</span></span> <span>Balcony: {{property.property_feature.balcony}}</span> <span>Floor: {{property.property_feature.floor}}</span> <span>Building Status: {{property.property_feature.status|title}}</span></p>
+                  <p>{{property.estate_type|title}}</p>
+                </div>
+                <div class="adderess">
+                  <i class="fa fa-map-pin" aria-hidden="true"></i>
+                  {{property.property_address.address|title}}, {{property.property_address.city|title}},
+                  {{property.property_address.state|title}}, {{property.property_address.pincode}}, {{property.property_address.landmark|title}}
+                </div>
+
+                {% if request.user.is_authenticated %}
+                <div>
+                  <p>Payment Status: <strong>{{property.payment_status|title}}</strong></p>
+                </div>
+                <div>
+                  <p>Property Status: <strong>{{property.user_request|title}}</strong></p>
+                </div>
+                  {% include 'ourproperty/partial/property_approval.html' %}
+                <br><br>
+              {% endif %}
+            </div>
+            <div class="item-foot">
+              <div class="pull-left">
+                <span class="prop-user-agent">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  {{property.property_user.full_name|title}}
+                </span>
+              </div>
+              <div class="pull-right">
+                <span class="prop-date">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                  {{property.property_posted_date}}
+                </span>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- end service -->
+      </div>
+    {% endfor %}

@@ -1,0 +1,46 @@
+{% load static %}
+
+<nav class="megamenu navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/"><img src="{% static 'images/logos/logo.png' %}" alt="image"></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="">About us </a></li>
+                        <li><a href="">Service</a></li>
+                        <li><a href="">Gallery</a></li>
+
+                        <li><a href="">Properties</a>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}">Logout</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
+                            <div class="dropdown-menu" style="padding: 15px; padding-bottom: 10px;">
+                                <form class="form-horizontal" method="post" accept-charset="UTF-8">
+                                    {% csrf_token %}
+                                    <table>
+                                        {{form.as_table}}
+                                    </table>
+                                    <input class="btn btn-primary" type="submit" name="submit" value="Login" />
+                                </form>
+                            </div>
+                        </li>
+                        {% endif %}
+                        <li class="social-links"><a href="#"><i class="fa fa-twitter global-radius"></i></a></li>
+                        <li class="social-links"><a href="#"><i class="fa fa-facebook global-radius"></i></a></li>
+                        <li class="social-links"><a href="#"><i class="fa fa-linkedin global-radius"></i></a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>

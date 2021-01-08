@@ -1,0 +1,133 @@
+{% extends 'ourproperty/base.html' %}
+{% load static %}
+{% block slider %}
+  <ul class='slideshow'>
+    <li>
+      <span>Summer</span>
+    </li>
+    <li>
+      <span>Fall</span>
+    </li>
+    <li>
+      <span>Winter</span>
+    </li>
+    <li>
+      <span>Spring</span>
+    </li>
+  </ul>
+
+    <div class="parallax first-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 wow slideInLeft hidden-xs hidden-sm">
+                    <div class="contact_form">
+                        <h3><i class="fa fa-envelope-o grd1 global-radius"></i> QUICK APPOINTMENT </h3>
+                        <form id="contactform1" class="row" name="contactform" method="post">
+                            <fieldset class="row-fluid">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" name="first_name1" id="first_name1" class="form-control" placeholder="First Name">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" name="last_name1" id="last_name1" class="form-control" placeholder="Last Name">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input type="email" name="email1" id="email1" class="form-control" placeholder="Your Email">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" name="phone1" id="phone1" class="form-control" placeholder="Your Phone">
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label class="sr-only">Select Time</label>
+                                    <select name="select_service1" id="select_service1" class="selectpicker form-control" data-style="btn-white">
+                                        <option value="selecttime">Select Time</option>
+                                        <option value="Weekdays">Weekdays</option>
+                                        <option value="Weekend">Weekend</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label class="sr-only">What is max price?</label>
+                                    <select name="select_price1" id="select_price1" class="selectpicker form-control" data-style="btn-white">
+                                        <option value="$100 - $2000">$100 - $2000</option>
+                                        <option value="$2000 - $4000">$2000 - $4000</option>
+                                        <option value="$4000 - $10000">$4000 - $10000</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                    <button type="submit" value="SEND" id="submit1" class="btn btn-light btn-radius btn-brd grd1 btn-block">Get an Appointment</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+        <div class="col-md-6 col-sm-12">
+                    <div class="big-tagline clearfix">
+                        <h2>Sell Your Property with CITY Real Estate</h2>
+                        <p class="lead">With CITY Real Estate responsive landing page template, you can promote your all property & real estate projects. </p>
+
+
+                    </div>
+                </div>
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+{% endblock %}
+
+{% block content %}
+<div class="about-box">
+    <div class="container">
+      <div class="row">
+        <div class="top-feature owl-carousel owl-theme">
+          <div class="item">
+            <div class="single-feature">
+              <div class="icon"><img src="{% static 'uploads/icon-01.png' %}" class="img-responsive" alt=""></div>
+              <h4><a href="#">Full Furnished</a></h4>
+              <p>Mauris eu porta orci. In at erat enim. Suspendisse felis erat, volutpat at nisl sit amet, maximus molestie nisi. </p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="single-feature">
+              <div class="icon"><img src="{% static 'uploads/icon-02.png' %}" class="img-responsive" alt=""></div>
+              <h4><a href="#">Living Inside a Nature</a></h4>
+              <p>Mauris eu porta orci. In at erat enim. Suspendisse felis erat, volutpat at nisl sit amet, maximus molestie nisi.</p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="single-feature">
+              <div class="icon"><img src="{% static 'uploads/icon-03.png' %}" class="img-responsive" alt=""></div>
+              <h4><a href="#">Luxurious Fittings</a></h4>
+              <p>Mauris eu porta orci. In at erat enim. Suspendisse felis erat, volutpat at nisl sit amet, maximus molestie nisi. </p>
+            </div>
+          </div>
+          <div class="item">
+            <div class="single-feature">
+              <div class="icon"><img src="{% static 'uploads/icon-04.png' %}" class="img-responsive" alt=""></div>
+              <h4><a href="#">Non Stop Security</a></h4>
+              <p>Lorem Is a dummy Mauris eu porta orci. In at erat enim. Suspendisse felis erat, volutpat at nisl sit amet, maximus molestie nisi. </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="hr1">
+
+      <div class="row">
+        <div class="col-md-6">
+                    <div class="post-media wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+                        <img src="{% static 'uploads/about_bg.jpg' %}" alt="" class="img-responsive">
+                    </div><!-- end media -->
+                </div>
+        <div class="col-md-6">
+          <div class="message-box right-ab">
+                        <h4>Awards Winning Real Estate Company</h4>
+                        <h2>Welcome to CITY Real Estate</h2>
+                        <p>Quisque eget nisl id nulla sagittis auctor quis id. Aliquam quis vehicula enim, non aliquam risus. Sed a tellus quis mi rhoncus dignissim.</p>
+            <p>Aenean eleifend in felis id viverra. Vestibulum semper ex eu molestie pulvinar. Maecenas non efficitur metus, et semper sem. Mauris ligula sapien, gravida a scelerisque ut, vehicula sed mauris. Proin dapibus mi id vulputate euismod. Nam ullamcorper dui tellus, non lacinia lorem hendrerit eu. Donec at orci cursus, rutrum metus eget, cursus turpis.  </p>
+            <a href="#" class="btn btn-light btn-radius grd1 btn-brd"> Read More </a>
+                    </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
