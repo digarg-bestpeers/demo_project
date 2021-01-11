@@ -1,7 +1,6 @@
 from django import forms
 from ourproperty.models import *
 
-
 class PropertyUserForm(forms.ModelForm):
   class Meta:
     model = PropertyUser
@@ -37,3 +36,11 @@ class PhotoForm(forms.ModelForm):
   class Meta:
     model = PropertyPhoto
     exclude = ['estate_property']
+
+class DealerEstatePropertyForm(forms.ModelForm):
+  class Meta:
+    model = EstateProperty
+    exclude = ['property_user', 'dealer', 'payment_status', 'user_request']
+    labels = {
+      'title': 'Property Title', 'estate_type': 'Property Type'
+    }

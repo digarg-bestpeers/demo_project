@@ -28,7 +28,7 @@
   <div class="container">
     <div class="section-title row text-center">
       <div class="col-md-8 col-md-offset-2">
-        <form id="searchformid" data-dealerkey={{dealer_key}}>
+        <form id="searchformid"">
           <input type="text" name="" id="search1" placeholder="Enter City Name">
           <input type="text" name="" id="search2" placeholder="Enter Location">
           <input type="submit" name="" value="Search" class="btn btn-primary">
@@ -47,7 +47,7 @@
 
     <hr class="invis">
     <div class="row" id="property-display">
-      {% include "ourproperty/partial/properties.html" %}
+      {% include "ourproperty/dealer/partial/properties.html" %}
     </div><!-- end row -->
   </div><!-- end container -->
 </div><!-- end section -->
@@ -60,14 +60,13 @@
   $("#searchformid").submit(function(event){
     event.preventDefault();
     // console.log("Button Clicked..")
-    let dealer_key = $(this).attr("data-dealerkey");
     let search1 = $("#search1").val();
     let search2 = $("#search2").val();
     if (search1 == "" && search2 == ""){
       alert("Please Provide Detail")
     }
     else{
-      search_data = {search1:search1, search2:search2, dealer_key:dealer_key}
+      search_data = {search1:search1, search2:search2}
       $.ajax({
         url: "{% url 'search' %}",
         headers: {'X-CSRFToken': $("input[name=csrfmiddlewaretoken]").val()},
@@ -82,6 +81,29 @@
       })
     }
 
+  })
+</script>
+
+<script type="text/javascript">
+  $(".requestbtn").click(function(event){
+    event.preventDefault();
+    // console.log("button clicked..")
+    let permit_data = $(this).val()
+    let permit_data_obj_id = $(this).attr("data-id");
+    // console.log(permit_data)
+    // console.log(permit_data_obj_id)
+    mydata = {permit_data:permit_data, permit_data_obj_id:permit_data_obj_id}
+    $.ajax({
+      url: "{% url 'dealer_permission' %}",
+      method: "GET",
+      data: mydata,
+      success: function(data){
+        // console.log(data.properties_data_html)
+        if(data.status == 200){
+          $("#property-display").html(data.properties_data_html)
+        }
+      }
+    })
   })
 </script>
 

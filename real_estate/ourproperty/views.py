@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import EstateProperty
-from .forms import PropertyUserForm, EstatePropertyForm,FeatureForm, AddressForm, PhotoForm
+from .models import EstateProperty, User
+from .forms import PropertyUserForm, EstatePropertyForm,FeatureForm, AddressForm, PhotoForm, DealerEstatePropertyForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
@@ -8,12 +8,9 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.template.loader import render_to_string
 # Create your views here.
 
-# def home(request):
-#   return render(request, "ourproperty/home.html")
 
 def public_properties(request, dealer_key):
-  # properties = EstateProperty.objects.filter(payment_status=True)
-  properties = EstateProperty.objects.filter(user_request="approved", dealer__username=dealer_key)
+  properties = EstateProperty.objects.filter(user_request="approved", dealer__username=dealer_key).order_by('-id')
   if request.method == "POST":
     property_user_form = PropertyUserForm(request.POST)
     estate_property_form = EstatePropertyForm(request.POST)
@@ -53,7 +50,8 @@ def public_properties(request, dealer_key):
       'feature_form': feature_form,
       'address_form': address_form,
       'photo_form': photo_form,
-      'properties':properties
+      'properties': properties,
+      'dealer_key': dealer_key
     }
   return render(request, "ourproperty/properties.html", context)
 
@@ -65,7 +63,6 @@ def payment(request, dealer_key):
         obj.payment_status = True
         obj.save()
       return HttpResponseRedirect('/real-estate/'+dealer_key)
-      # return HttpResponseRedirect("/properties/")
   return render(request, 'ourproperty/payment.html')
 
 def login_dealer(request):
@@ -93,18 +90,22 @@ def logout_dealer(request):
 
 def dealer_property(request):
   if request.user.is_authenticated:
-    properties = EstateProperty.objects.filter(dealer=request.user)
+    properties = EstateProperty.objects.filter(dealer=request.user).order_by('-id')
     if request.method == 'POST':
       property_user_form = PropertyUserForm(request.POST)
-      estate_property_form = EstatePropertyForm(request.POST)
+      estate_property_form = DealerEstatePropertyForm(request.POST)
       feature_form = FeatureForm(request.POST)
       address_form = AddressForm(request.POST)
       photo_form = PhotoForm(request.POST, request.FILES)
+      dealer_obj = User.objects.get(username = request.user.username)
       if property_user_form.is_valid() and estate_property_form.is_valid() and feature_form.is_valid() and address_form.is_valid() and photo_form.is_valid():
         property_user_obj = property_user_form.save()
 
         estate_property_form.save(commit=False)
         estate_property_form.instance.property_user = property_user_obj
+        estate_property_form.instance.dealer = dealer_obj
+        estate_property_form.instance.payment_status = True
+        estate_property_form.instance.user_request = "approved"
         estate_property_obj = estate_property_form.save()
 
         feature_form.save(commit=False)
@@ -120,11 +121,9 @@ def dealer_property(request):
         photo_form.save()
 
         return HttpResponseRedirect('/real-estate/')
-        # return HttpResponseRedirect('/real-estate/'+request.user.username +'/detail/')
-
     else:
       property_user_form = PropertyUserForm()
-      estate_property_form = EstatePropertyForm()
+      estate_property_form = DealerEstatePropertyForm()
       feature_form = FeatureForm()
       address_form = AddressForm()
       photo_form = PhotoForm()
@@ -137,7 +136,7 @@ def dealer_property(request):
       'photo_form': photo_form,
       'properties':properties
     }
-    return render(request, "ourproperty/properties.html", context)
+    return render(request, "ourproperty/dealer/properties.html", context)
   else:
     return HttpResponseRedirect('/')
 
@@ -147,9 +146,11 @@ def search_data(request):
     search2 = request.POST.get("search2")
     if request.user.is_authenticated:
       properties = EstateProperty.objects.filter(dealer=request.user, property_address__city__icontains=search1, property_address__address__icontains=search2)
+      properties_data_html = render_to_string("ourproperty/dealer/partial/properties.html", context={'properties':properties})
     else:
-      properties = EstateProperty.objects.filter(user_request="approved", property_address__city__icontains=search1, property_address__address__icontains=search2)
-    properties_data_html = render_to_string("ourproperty/partial/properties.html", context={'properties':properties})
+      dealer_key = request.POST.get("dealer_key")
+      properties = EstateProperty.objects.filter(user_request="approved", dealer__username=dealer_key, property_address__city__icontains=search1, property_address__address__icontains=search2)
+      properties_data_html = render_to_string("ourproperty/partial/properties.html", context={'properties':properties})
     return JsonResponse({'status':200, 'properties_data_html':properties_data_html})
   else:
     return JsonResponse({'warning': 'Page Not Found'})
@@ -162,7 +163,7 @@ def dealer_permission(request):
     obj.user_request = permit_data
     obj.save()
     properties = EstateProperty.objects.filter(dealer=obj.dealer)
-    properties_data_html = render_to_string("ourproperty/partial/properties.html", context={'properties':properties})
+    properties_data_html = render_to_string("ourproperty/dealer/partial/properties.html", context={'properties':properties})
     return JsonResponse({'status':200, 'properties_data_html':properties_data_html})
 
 

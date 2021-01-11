@@ -21,6 +21,14 @@
                   {{property.property_address.address|title}}, {{property.property_address.city|title}},
                   {{property.property_address.state|title}}, {{property.property_address.pincode}}, {{property.property_address.landmark|title}}
                 </div>
+                <div>
+                  <p>Payment Status: <strong>{{property.payment_status|title}}</strong></p>
+                </div>
+                <div>
+                  <p>Property Status: <strong>{{property.user_request|title}}</strong></p>
+                </div>
+                  {% include 'ourproperty/dealer/partial/property_approval.html' %}
+                <br><br>
             </div>
             <div class="item-foot">
               <div class="pull-left">

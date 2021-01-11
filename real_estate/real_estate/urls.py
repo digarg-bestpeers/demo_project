@@ -24,8 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login_dealer, name='login'),
     path('logout/', views.logout_dealer, name='logout'),
-    # path('properties/', views.public_properties, name="public_properties"),
-    # path('properties/payment/',views.payment, name="payment"),
     path('search/', views.search_data, name='search'),
     path('request/', views.dealer_permission, name="dealer_permission"),
 
