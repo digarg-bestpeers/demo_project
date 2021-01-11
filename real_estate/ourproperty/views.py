@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import EstateProperty, User
-from .forms import PropertyUserForm, EstatePropertyForm,FeatureForm, AddressForm, PhotoForm, DealerEstatePropertyForm
+from .forms import PropertyUserForm, EstatePropertyForm,FeatureForm, AddressForm, PhotoForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
@@ -17,11 +17,13 @@ def public_properties(request, dealer_key):
     feature_form = FeatureForm(request.POST)
     address_form = AddressForm(request.POST)
     photo_form = PhotoForm(request.POST, request.FILES)
+    dealer_obj = User.objects.get(username = dealer_key)
     if property_user_form.is_valid() and estate_property_form.is_valid() and feature_form.is_valid() and address_form.is_valid() and photo_form.is_valid():
       property_user_obj = property_user_form.save()
 
       estate_property_form.save(commit=False)
       estate_property_form.instance.property_user = property_user_obj
+      estate_property_form.instance.dealer = dealer_obj
       estate_property_obj = estate_property_form.save()
 
       feature_form.save(commit=False)
@@ -93,7 +95,7 @@ def dealer_property(request):
     properties = EstateProperty.objects.filter(dealer=request.user).order_by('-id')
     if request.method == 'POST':
       property_user_form = PropertyUserForm(request.POST)
-      estate_property_form = DealerEstatePropertyForm(request.POST)
+      estate_property_form = EstatePropertyForm(request.POST)
       feature_form = FeatureForm(request.POST)
       address_form = AddressForm(request.POST)
       photo_form = PhotoForm(request.POST, request.FILES)
@@ -123,7 +125,7 @@ def dealer_property(request):
         return HttpResponseRedirect('/real-estate/')
     else:
       property_user_form = PropertyUserForm()
-      estate_property_form = DealerEstatePropertyForm()
+      estate_property_form = EstatePropertyForm()
       feature_form = FeatureForm()
       address_form = AddressForm()
       photo_form = PhotoForm()
