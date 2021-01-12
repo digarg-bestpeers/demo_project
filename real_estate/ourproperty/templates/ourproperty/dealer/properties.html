@@ -85,7 +85,7 @@
 </script>
 
 <script type="text/javascript">
-  $(".requestbtn").click(function(event){
+  $(document).on('click', '.requestbtn', function(event){
     event.preventDefault();
     // console.log("button clicked..")
     let permit_data = $(this).val()
@@ -94,13 +94,14 @@
     // console.log(permit_data_obj_id)
     mydata = {permit_data:permit_data, permit_data_obj_id:permit_data_obj_id}
     $.ajax({
-      url: "{% url 'dealer_permission' %}",
+      url: "{% url 'dealer_approval' %}",
       method: "GET",
       data: mydata,
       success: function(data){
         // console.log(data.properties_data_html)
         if(data.status == 200){
           $("#property-display").html(data.properties_data_html)
+
         }
       }
     })

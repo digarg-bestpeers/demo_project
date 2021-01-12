@@ -6,6 +6,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, JsonResponse
 from django.template.loader import render_to_string
+from real_estate.settings import EMAIL_HOST_USER
+from django.core.mail import send_mail
 # Create your views here.
 
 
@@ -20,6 +22,10 @@ def public_properties(request, dealer_key):
     dealer_obj = User.objects.get(username = dealer_key)
     if property_user_form.is_valid() and estate_property_form.is_valid() and feature_form.is_valid() and address_form.is_valid() and photo_form.is_valid():
       property_user_obj = property_user_form.save()
+      subject = 'Property register with Ourproperty'
+      message = 'Thank you for registering property with us'
+      recepient = property_user_obj.email
+      send_mail(subject,message,EMAIL_HOST_USER,[recepient],fail_silently=False)
 
       estate_property_form.save(commit=False)
       estate_property_form.instance.property_user = property_user_obj
@@ -157,7 +163,7 @@ def search_data(request):
   else:
     return JsonResponse({'warning': 'Page Not Found'})
 
-def dealer_permission(request):
+def dealer_approval(request):
   if request.method == "GET":
     permit_data = request.GET.get('permit_data')
     permit_data_obj_id = int(request.GET.get('permit_data_obj_id'))

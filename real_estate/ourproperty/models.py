@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 
 STATUS_CHOICES = (('furnished','Furnished'),('semifurnished','Semifurnished'), ('unfurnished','Unfurnished'))
 
-
-
 class PropertyUser(models.Model):
     '''Property owner detail'''
     full_name = models.CharField(max_length=100)

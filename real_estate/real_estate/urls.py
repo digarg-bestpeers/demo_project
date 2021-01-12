@@ -25,7 +25,7 @@ urlpatterns = [
     path('', views.login_dealer, name='login'),
     path('logout/', views.logout_dealer, name='logout'),
     path('search/', views.search_data, name='search'),
-    path('request/', views.dealer_permission, name="dealer_permission"),
+    path('approval/', views.dealer_approval, name="dealer_approval"),
 
     path('real-estate/', include("ourproperty.urls"))
 
