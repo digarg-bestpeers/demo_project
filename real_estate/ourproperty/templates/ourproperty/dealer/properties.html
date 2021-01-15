@@ -28,11 +28,9 @@
   <div class="container">
     <div class="section-title row text-center">
       <div class="col-md-8 col-md-offset-2">
-        <form id="searchformid"">
-          <input type="text" name="" id="search1" placeholder="Enter City Name">
-          <input type="text" name="" id="search2" placeholder="Enter Location">
-          <input type="submit" name="" value="Search" class="btn btn-primary">
-        </form>
+        <input type="text" name="" id="search1id" class="searchid" placeholder="search by city">
+        <input type="text" name="" id="search2id" class="searchid" placeholder="search by property status">
+        <button class="btn btn-primary" id="resetid">Reset</button>
         <br>
         <h3>Property Details</h3>
         <p class="lead">Quisque eget nisl id nulla sagittis auctor quis id. Aliquam quis vehicula enim, non aliquam risus. Sed a tellus quis mi rhoncus dignissim.</p>
@@ -57,30 +55,42 @@
 {% block extra_js %}
 
 <script type="text/javascript">
-  $("#searchformid").submit(function(event){
+  $(".searchid").on('keyup', function(event){
     event.preventDefault();
-    // console.log("Button Clicked..")
-    let search1 = $("#search1").val();
-    let search2 = $("#search2").val();
-    if (search1 == "" && search2 == ""){
-      alert("Please Provide Detail")
-    }
-    else{
-      search_data = {search1:search1, search2:search2}
+    let search1id = $("#search1id").val()
+    let search2id = $("#search2id").val()
+    search_mydata = {search1id:search1id,search2id:search2id}
+
       $.ajax({
         url: "{% url 'search' %}",
-        headers: {'X-CSRFToken': $("input[name=csrfmiddlewaretoken]").val()},
-        method: "POST",
-        data: search_data,
+        method: "GET",
+        data: search_mydata,
         success: function(data){
-          // console.log(data.status)
-          if(data.status == 200){
+          if(data.status==200){
             $("#property-display").html(data.properties_data_html)
           }
-        }
-      })
-    }
+      }
+    })
 
+  })
+
+  $("#resetid").click(function(event){
+    event.preventDefault();
+    let dealer_key = $(this).attr("data-dealerkey")
+    console.log("Button clicked..")
+    console.log(dealer_key)
+    search_mydata = {dealer_key:dealer_key}
+    $.ajax({
+      url: "{% url 'search' %}",
+      method: "GET",
+      data: search_mydata,
+      success: function(data){
+        $(".searchid").val('')
+        if(data.status==200){
+          $("#property-display").html(data.properties_data_html)
+        }
+      }
+    })
   })
 </script>
 

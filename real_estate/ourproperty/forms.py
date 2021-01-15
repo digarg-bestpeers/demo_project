@@ -1,22 +1,10 @@
 from django import forms
 from ourproperty.models import *
 
-class PropertyUserForm(forms.ModelForm):
-  class Meta:
-    model = PropertyUser
-    fields = '__all__'
-    widgets = {'password': forms.PasswordInput()}
-
-  # def clean_mobile(self):
-  #   mobile = str(self.cleaned_data['mobile'])
-  #   if len(mobile) != 10:
-  #     raise forms.ValidationError("Mobile number should have 10 digits only")
-  #   return mobile
-
 class EstatePropertyForm(forms.ModelForm):
   class Meta:
     model = EstateProperty
-    exclude = ['property_user', 'dealer', 'payment_status', 'user_request']
+    exclude = ['dealer', 'created_by', 'payment_status', 'user_request']
     labels = {
       'title': 'Property Title', 'estate_type': 'Property Type'
     }
@@ -25,7 +13,10 @@ class FeatureForm(forms.ModelForm):
   class Meta:
     model = Feature
     exclude = ['estate_property']
-    labels = {'area': 'Area(sq-ft)'}
+    labels = {
+      'area': 'Area(sq-ft)',
+      'status': 'Property Status'
+      }
 
 class AddressForm(forms.ModelForm):
   class Meta:
@@ -36,3 +27,26 @@ class PhotoForm(forms.ModelForm):
   class Meta:
     model = PropertyPhoto
     exclude = ['estate_property']
+
+class UserForm(forms.ModelForm):
+  class Meta:
+    model = User
+    fields = ['first_name', 'last_name', 'email']
+
+  def clean(self):
+    cleaned_data = super(UserForm, self).clean()
+    email = cleaned_data.get('email')
+    if User.objects.filter(email=email).exists():
+      raise forms.ValidationError('Email already exists')
+
+
+class UserTypeForm(forms.ModelForm):
+  class Meta:
+    model = UserType
+    fields = ['mobile']
+
+  # def clean_mobile(self):
+  #   mobile = str(self.cleaned_data['mobile'])
+  #   if len(mobile) != 10:
+  #     raise forms.ValidationError("Mobile number should have 10 digits only")
+  #   return mobile

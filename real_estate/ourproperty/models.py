@@ -3,20 +3,21 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 STATUS_CHOICES = (('furnished','Furnished'),('semifurnished','Semifurnished'), ('unfurnished','Unfurnished'))
+USER_ROLL_CHOICES = (('dealer','Dealer'),('enduser','EndUser'))
 
-class PropertyUser(models.Model):
-    '''Property owner detail'''
-    full_name = models.CharField(max_length=100)
+class UserType(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_type")
+    user_roll = models.CharField(max_length=20, choices=USER_ROLL_CHOICES, default='enduser')
     mobile = models.IntegerField()
-    email = models.EmailField()
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.email
+        return self.user.username
 
 class EstateProperty(models.Model):
     '''Property declaration'''
-    property_user = models.ForeignKey(PropertyUser, on_delete=models.CASCADE)
-    dealer = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="dealer_property")
+    dealer = models.ForeignKey(UserType, on_delete=models.CASCADE, related_name="property_dealer", null=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="property_user", null=True)
     title = models.CharField(max_length=30)
     estate_type = models.CharField(max_length=200)
     monthly_charge = models.IntegerField()
@@ -29,6 +30,10 @@ class EstateProperty(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def full_name(self):
+        return "{} {}".format(self.created_by.first_name,self.created_by.last_name)
 
 
 class Address(models.Model):

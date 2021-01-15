@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from ourproperty import views
 
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,9 +25,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login_dealer, name='login'),
     path('logout/', views.logout_dealer, name='logout'),
-    path('search/', views.search_data, name='search'),
+    path('search/', views.search, name='search'),
     path('approval/', views.dealer_approval, name="dealer_approval"),
 
-    path('real-estate/', include("ourproperty.urls"))
+    path('real-estate/', include("ourproperty.urls")),
+
+    path('enduser/',views.EndUser.as_view(),name='enduser'),
+
+    # path('enduser/', views.end_user_property, name='enduser'),
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

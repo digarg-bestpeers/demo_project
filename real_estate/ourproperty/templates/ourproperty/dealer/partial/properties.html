@@ -1,4 +1,6 @@
 {% load static %}
+
+{% if properties %}
 {% for property in properties %}
       <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="service-widget">
@@ -34,7 +36,7 @@
               <div class="pull-left">
                 <span class="prop-user-agent">
                   <i class="fa fa-user" aria-hidden="true"></i>
-                  {{property.property_user.full_name|title}}
+                  {{property.full_name|title}}
                 </span>
               </div>
               <div class="pull-right">
@@ -50,4 +52,7 @@
       </div>
     {% endfor %}
 
+{% else %}
+  <p>&nbsp &nbsp &nbsp No Property Available</p>
+{% endif %}
 
