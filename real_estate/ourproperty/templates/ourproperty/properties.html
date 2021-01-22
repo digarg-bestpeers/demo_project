@@ -1,27 +1,8 @@
 {% extends 'ourproperty/base.html' %}
 {% load static %}
-{% load filters %}
-
-{% block slider %}
-<div class="all-title-box">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Properties</h2>
-          <!-- Breadcrumbs -->
-          <nav id="breadcrumbs">
-            <ul>
-              <li><a href="#">Home</a></li>
-              <li>Properties</li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
 
 {% block content %}
+<br><br>
     <div id="features" class="section wb">
     <button class="btn btn-success pull-right" data-target="#propertymodel" data-toggle="modal">Add Property</button>
       {% include 'ourproperty/partial/add_property.html' %}
@@ -29,29 +10,31 @@
   <div class="container">
     <div class="section-title row text-center">
       <div class="col-md-8 col-md-offset-2">
-        <select>
-          <option>All</option>
-          {% for property in properties %}
-            <option>{{property.property_address.city |city}}</option>
+        <input type="text" name="" id="searchtitle" data-dealerkey={{dealer_key}} class="search" placeholder="search by Property Name">
+        <select data-dealerkey={{dealer_key}} id="searchcity" class="search">
+          <option value="">All</option>
+          {% for obj in qs %}
+            <option value={{obj.property_address.city}} data-city={{obj.property_address.city}}>{{obj.property_address.city|title}}</option>
           {% endfor %}
         </select>
-        <input type="text" name="" id="search1id" data-dealerkey={{dealer_key}} class="searchid" placeholder="search by city">
-        <input type="text" name="" id="search2id" data-dealerkey={{dealer_key}} class="searchid" placeholder="search by property status">
-        <button class="btn btn-primary" id="resetid" data-dealerkey={{dealer_key}}>Reset</button>
+        <select data-dealerkey={{dealer_key}} id="searchstatus" class="search">
+          <option value="">All</option>
+          <option value="furnished">Furnished</option>
+          <option value="semifurnished">Semifurnished</option>
+          <option value="unfurnished">Unfurnished</option>
+        </select>
+        <button class="btn btn-primary" id="reset" data-dealerkey={{dealer_key}}>Reset</button>
         <br><br>
-        <h3>Property Details</h3>
+        <h3>Available Property</h3>
         <p class="lead">Quisque eget nisl id nulla sagittis auctor quis id. Aliquam quis vehicula enim, non aliquam risus. Sed a tellus quis mi rhoncus dignissim.</p>
       </div><!-- end col -->
     </div><!-- end title -->
 
-    <!--  <div>
-      <button class="btn btn-success pull-right" data-target="#propertymodel" data-toggle="modal">Add Property</button>
-        {% include 'ourproperty/partial/add_property.html' %}
-        </div> -->
+
 
 
     <hr class="invis">
-    <div class="row" id="property-display">
+    <div id="property-display">
       {% include "ourproperty/partial/properties.html" %}
     </div><!-- end row -->
   </div><!-- end container -->
@@ -60,40 +43,55 @@
 
 
 {% block extra_js %}
-
 <script type="text/javascript">
-  $(".searchid").on('keyup', function(event){
+  $(document).on('keyup', '.search', function(event){
     event.preventDefault();
-    let search1id = $("#search1id").val()
-    let search2id = $("#search2id").val()
-    let dealer_key = $(this).attr("data-dealerkey");
-    search_mydata = {search1id:search1id,search2id:search2id, dealer_key:dealer_key}
-
-      $.ajax({
-        url: "{% url 'search' %}",
-        method: "GET",
-        data: search_mydata,
-        success: function(data){
-          if(data.status==200){
+    let dealer_key = $(this).attr("data-dealerkey")
+    let title = $("#searchtitle").val()
+    let city = $("#searchcity").val()
+    let status = $("#searchstatus").val()
+    searchdata = {title:title, city:city, status:status, dealer_key:dealer_key}
+    $.ajax({
+      url: "{% url 'search' %}",
+      method: "GET",
+      data: searchdata,
+      success: function(data){
+        if(data.status==200){
             $("#property-display").html(data.properties_data_html)
           }
       }
     })
-
   })
 
-  $("#resetid").click(function(event){
+  $(document).on('change', '.search', function(event){
     event.preventDefault();
     let dealer_key = $(this).attr("data-dealerkey")
-    console.log("Button clicked..")
-    console.log(dealer_key)
-    search_mydata = {dealer_key:dealer_key}
+    let title = $("#searchtitle").val()
+    let city = $("#searchcity").val()
+    let status = $("#searchstatus").val()
+    searchdata = {title:title, city:city, status:status, dealer_key:dealer_key}
     $.ajax({
       url: "{% url 'search' %}",
       method: "GET",
-      data: search_mydata,
+      data: searchdata,
       success: function(data){
-        $(".searchid").val('')
+        if(data.status==200){
+            $("#property-display").html(data.properties_data_html)
+          }
+      }
+    })
+  })
+
+  $(document).on('click', '#reset', function(event){
+    event.preventDefault();
+    let dealer_key = $(this).attr("data-dealerkey")
+    searchdata = {dealer_key:dealer_key}
+    $.ajax({
+      url: "{% url 'search' %}",
+      method: "GET",
+      data: searchdata,
+      success: function(data){
+        $(".search").val('')
         if(data.status==200){
           $("#property-display").html(data.properties_data_html)
         }
@@ -101,5 +99,4 @@
     })
   })
 </script>
-
 {% endblock %}

@@ -1,7 +1,9 @@
 {% load static %}
 
 {% if properties %}
+
 {% for property in properties %}
+
       <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="service-widget">
           <div class="property-main">
@@ -29,6 +31,9 @@
                 <div>
                   <p>Property Status: <strong>{{property.user_request|title}}</strong></p>
                 </div>
+                <div class="pull-left">
+                  <a href="{% url 'update' property.id %}" class="btn btn-warning btn-sm">Edit</a>
+                </div>
                   {% include 'ourproperty/dealer/partial/property_approval.html' %}
                 <br><br>
             </div>
@@ -50,7 +55,7 @@
           </div>
         </div><!-- end service -->
       </div>
-    {% endfor %}
+      {% endfor %}
 
 {% else %}
   <p>&nbsp &nbsp &nbsp No Property Available</p>

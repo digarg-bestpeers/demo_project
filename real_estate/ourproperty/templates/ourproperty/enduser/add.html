@@ -9,12 +9,10 @@
     </div>
 
     <div class="modal-body">
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" action="/add/">
       {% csrf_token %}
       <div class="form-group">
             <table>
-              {{user_form.as_table}}
-              {{user_type_form.as_table}}
               {{estate_property_form.as_table}}
               {{feature_form.as_table}}
               {{address_form.as_table}}

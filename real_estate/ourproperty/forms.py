@@ -26,18 +26,23 @@ class AddressForm(forms.ModelForm):
 class PhotoForm(forms.ModelForm):
   class Meta:
     model = PropertyPhoto
-    exclude = ['estate_property']
+    fields = ['photo']
+    # exclude = ['estate_property']
+    widgets = {
+              # 'photo': forms.FileInput(attrs={'multiple': True})
+              'photo': forms.FileInput()
+        }
 
 class UserForm(forms.ModelForm):
   class Meta:
     model = User
     fields = ['first_name', 'last_name', 'email']
 
-  def clean(self):
-    cleaned_data = super(UserForm, self).clean()
-    email = cleaned_data.get('email')
-    if User.objects.filter(email=email).exists():
-      raise forms.ValidationError('Email already exists')
+  # def clean(self):
+  #   cleaned_data = super(UserForm, self).clean()
+  #   email = cleaned_data.get('email')
+  #   if User.objects.filter(email=email).exists():
+  #     raise forms.ValidationError('Email already exists')
 
 
 class UserTypeForm(forms.ModelForm):
@@ -50,3 +55,8 @@ class UserTypeForm(forms.ModelForm):
   #   if len(mobile) != 10:
   #     raise forms.ValidationError("Mobile number should have 10 digits only")
   #   return mobile
+
+class EditUserForm(forms.ModelForm):
+  class Meta:
+    model = User
+    fields = ['first_name', 'last_name']

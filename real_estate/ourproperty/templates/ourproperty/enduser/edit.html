@@ -1,0 +1,51 @@
+{% extends 'ourproperty/base.html' %}
+
+{% block content %}
+<br><br><br><br><br>
+
+
+<form method="POST" enctype="multipart/form-data" novalidate="">
+  {% csrf_token %}
+
+  <h3 class="alert alert-danger">Property Photo</h3>
+  <figure class="post-media wow fadeIn">
+    <img src="{{obj.property_photos.get.photo.url}}" alt="" class="img-responsive">
+  </figure>
+  {{photo_form}}
+  <br>
+  <h3 class="alert alert-danger">User Profile</h3>
+
+    {{user_form}}
+    {{user_type_form}}
+
+  <br><br>
+
+  <h3 class="alert alert-danger">Property Detail</h3>
+  <table>
+    {{estate_property_form.as_table}}
+  </table>
+  <br><br>
+
+  <h3 class="alert alert-danger">Property Feature</h3>
+  <table>
+    {{feature_form.as_table}}
+  </table>
+  <br><br>
+
+  <h3 class="alert alert-danger">Property Address</h3>
+  <table>
+    {{address_form.as_table}}
+  </table>
+  <br><br>
+    <div class="pull-right">
+      {% if request.user.user_type.user_roll == 'dealer' %}
+        <a href="{% url 'dealer_property_detail' %}" class="btn btn-warning btn-lg">Cancel</a>
+      {% else %}
+        <a href="{% url 'dashboard' %}" class="btn btn-warning btn-lg">Cancel</a>
+      {% endif %}
+      <input type="submit" name="" value="Save" class="btn btn-success btn-lg">
+    </div>
+</form>
+<br><br>
+
+{% endblock %}

@@ -29,10 +29,9 @@ urlpatterns = [
     path('approval/', views.dealer_approval, name="dealer_approval"),
 
     path('real-estate/', include("ourproperty.urls")),
+    path('dashboard/',views.EndUser.as_view(),name='dashboard'),
 
-    path('enduser/',views.EndUser.as_view(),name='enduser'),
 
-    # path('enduser/', views.end_user_property, name='enduser'),
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

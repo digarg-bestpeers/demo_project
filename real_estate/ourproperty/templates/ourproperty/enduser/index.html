@@ -2,20 +2,21 @@
 
 {% block content %}
 <br><br><br><br><br>
-{% for property in object_list %}
-<h4><strong>Hello, {{property.created_by.first_name}}</strong></h4>
-<br><br>
+
 <table border="1" class="table">
   <thead>
     <th>Property Title</th>
     <th>Payment Status</th>
     <th>Approval Status from Dealer</th>
+    <th>Update Property</th>
   </thead>
+{% for property in object_list %}
   <tr>
     <td>{{property.title|title}}</td>
     <td>{{property.payment_status|title}}</td>
     <td>{{property.user_request|title}}</td>
-    <td><div class="pull-right"><a href="" class="btn btn-info btn-sm">Edit</a></div></td>
+    <td><a href="{% url 'update' property.id %}" class="btn btn-info btn-sm">Edit</a>
+    </td>
   </tr>
   {% endfor %}
 </table>

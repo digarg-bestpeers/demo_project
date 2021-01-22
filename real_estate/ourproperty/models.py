@@ -35,7 +35,6 @@ class EstateProperty(models.Model):
     def full_name(self):
         return "{} {}".format(self.created_by.first_name,self.created_by.last_name)
 
-
 class Address(models.Model):
     '''Property address information'''
     estate_property = models.OneToOneField(EstateProperty, on_delete=models.CASCADE, related_name='property_address')
